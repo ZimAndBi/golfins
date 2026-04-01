@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip show:*)",
+      "Bash(pip install:*)",
+      "Bash(python scripts/seed_data.py)",
+      "Bash(docker exec:*)",
+      "Bash(curl -s -X POST http://localhost:8001/api/v1/auth/login -H \"Content-Type: application/json\" -d '{\"\"email\"\":\"\"test@golfins.com\"\",\"\"password\"\":\"\"Test1234!\"\"}')",
+      "Bash(docker-compose restart:*)",
+      "Bash(docker-compose build:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(curl -s -X POST http://localhost/api/notifications/send -H \"Content-Type: application/json\" --data-raw '{\"\"\"\"recipient_email\"\"\"\":\"\"\"\"test@golfins.com\"\"\"\",\"\"\"\"template\"\"\"\":\"\"\"\"policy_purchased\"\"\"\",\"\"\"\"data\"\"\"\":{\"\"\"\"name\"\"\"\":\"\"\"\"Nguyen\"\"\"\",\"\"\"\"policy_number\"\"\"\":\"\"\"\"POL-TEST01\"\"\"\",\"\"\"\"premium\"\"\"\":\"\"\"\"55.00\"\"\"\"}}')",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s -X POST http://localhost:8001/api/v1/auth/register -H 'Content-Type: application/json' --data-raw '{\"email\":\"admin@golfins.com\",\"password\":\"Admin1234!\",\"first_name\":\"Admin\",\"last_name\":\"Golfins\"}')",
+      "Bash(curl -s http://localhost/api/admin/claims)",
+      "Bash(curl -s http://localhost/api/admin/policies)",
+      "Bash(curl -s http://localhost/api/admin/users)",
+      "Bash(docker-compose ps:*)",
+      "Bash(curl -s http://localhost/api/admin/stats)",
+      "Bash(curl -s \"http://localhost/api/admin/claims/stats\")",
+      "Bash(curl -s \"http://localhost/api/admin/policies/stats\")",
+      "Bash(curl -s http://localhost/api/admin/claims/stats)",
+      "Bash(curl -s http://localhost/api/admin/policies/stats)",
+      "Bash(curl -s http://localhost/api/policies)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost/policies)",
+      "Bash(curl -s -X POST http://localhost/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@golfins.com\",\"password\":\"admin123\"}')",
+      "Bash(curl -s -X POST http://localhost/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@golfins.com\",\"password\":\"Admin@123\"}')",
+      "Bash(curl -s -X POST http://localhost/api/claims/hole-in-one -H \"Content-Type: application/json\" -d '{\"course_name\":\"Royal Melbourne\",\"hole_number\":7,\"handicap_index\":15.2,\"celebration_amount\":350,\"incident_date\":\"2026-04-01\",\"witnesses\":[{\"name\":\"John Smith\",\"contact\":\"0412345678\"}],\"user_id\":\"test\",\"email\":\"test@golfins.com\",\"name\":\"Test\"}')",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s -X POST http://localhost/api/equipment -H \"Content-Type: application/json\" -d '{\"name\":\"TaylorMade Driver\",\"category\":\"driver\",\"brand\":\"TaylorMade\",\"estimated_value\":650,\"user_id\":\"test\"}')"
+    ]
+  }
+}
