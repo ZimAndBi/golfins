@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Golf Insurance Platform - MVP
 
 **A production-ready golf insurance web platform built with Next.js, FastAPI, and Docker.**
@@ -304,3 +305,7 @@ Commercial - Golf Insurance MVP Platform
 **Built with ❤️ for golfers everywhere**
 
 MVP Completed: March 31, 2026
+=======
+# golfins
+Bảo hiểm Golf
+>>>>>>> c80c1ef2542a1f6b68adb881e6819b6a9018219a
