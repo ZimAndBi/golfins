@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import apiClient from '@/lib/api'
 
 const STATUS_COLORS: Record<string, string> = {
-  submitted: 'bg-blue-100 text-blue-700',
-  under_review: 'bg-yellow-100 text-yellow-700',
-  approved: 'bg-green-100 text-green-700',
-  rejected: 'bg-red-100 text-red-700',
+  submitted: 'bg-blue-50 text-blue-600 ring-blue-100',
+  under_review: 'bg-amber-50 text-amber-600 ring-amber-100',
+  approved: 'bg-emerald-50 text-emerald-600 ring-emerald-100',
+  rejected: 'bg-rose-50 text-rose-600 ring-rose-100',
 }
 
 export default function AdminClaims() {
@@ -40,76 +40,94 @@ export default function AdminClaims() {
     }
   }
 
-  if (loading) return <div className="text-center py-12">Loading...</div>
+  if (loading) return <div className="text-center py-20 font-black text-slate-300 animate-pulse">Scanning Claim Registry...</div>
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">All Claims</h1>
-        <span className="text-gray-500 text-sm">{claims.length} total</span>
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Active Claims</h1>
+          <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1">Registry Monitoring</p>
+        </div>
+        <div className="bg-primary text-white px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10 self-start md:self-auto uppercase tracking-widest">
+            Total Entry: {claims.length}
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b">
-            <tr>
-              <th className="text-left px-4 py-3 font-semibold text-gray-600">Claim #</th>
-              <th className="text-left px-4 py-3 font-semibold text-gray-600">Amount</th>
-              <th className="text-left px-4 py-3 font-semibold text-gray-600">Date</th>
-              <th className="text-left px-4 py-3 font-semibold text-gray-600">Description</th>
-              <th className="text-left px-4 py-3 font-semibold text-gray-600">Status</th>
-              <th className="text-left px-4 py-3 font-semibold text-gray-600">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {claims.length === 0 ? (
-              <tr><td colSpan={6} className="text-center py-8 text-gray-400">No claims found</td></tr>
-            ) : claims.map((claim) => (
-              <tr key={claim.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-mono font-semibold">{claim.claim_number}</td>
-                <td className="px-4 py-3 font-semibold">${claim.amount_requested}</td>
-                <td className="px-4 py-3 text-gray-500">{claim.incident_date || 'N/A'}</td>
-                <td className="px-4 py-3 text-gray-600 max-w-xs truncate">{claim.description || '-'}</td>
-                <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${STATUS_COLORS[claim.status] || 'bg-gray-100 text-gray-600'}`}>
-                    {claim.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-2">
-                    {claim.status !== 'approved' && (
-                      <button
-                        onClick={() => updateStatus(claim.id, 'approved')}
-                        disabled={updating === claim.id}
-                        className="px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 disabled:opacity-50"
-                      >
-                        Approve
-                      </button>
-                    )}
-                    {claim.status !== 'under_review' && claim.status !== 'approved' && (
-                      <button
-                        onClick={() => updateStatus(claim.id, 'under_review')}
-                        disabled={updating === claim.id}
-                        className="px-3 py-1 bg-yellow-500 text-white text-xs rounded hover:bg-yellow-600 disabled:opacity-50"
-                      >
-                        Review
-                      </button>
-                    )}
-                    {claim.status !== 'rejected' && (
-                      <button
-                        onClick={() => updateStatus(claim.id, 'rejected')}
-                        disabled={updating === claim.id}
-                        className="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 disabled:opacity-50"
-                      >
-                        Reject
-                      </button>
-                    )}
-                  </div>
-                </td>
+      <div className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left border-collapse min-w-[800px]">
+            <thead className="bg-slate-50/50 border-b border-slate-100">
+              <tr>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Incident #</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Valuation</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Event Date</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Evidence Summary</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">State</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Protocol Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {claims.length === 0 ? (
+                <tr><td colSpan={6} className="text-center py-20 text-slate-300 font-bold italic">No claim requests detected in registry.</td></tr>
+              ) : claims.map((claim) => (
+                <tr key={claim.id} className="group hover:bg-slate-50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="font-black text-slate-900 font-mono text-[12px] tracking-tight">{claim.claim_number}</div>
+                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">ID-LINK: {claim.id.slice(0,8)}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="font-black text-slate-900 text-sm">${Number(claim.amount_requested).toLocaleString()}</div>
+                  </td>
+                  <td className="px-6 py-4 text-slate-500 font-medium text-[11px]">
+                    {claim.incident_date || 'N/A'}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-slate-400 text-[11px] leading-relaxed max-w-[150px] truncate group-hover:whitespace-normal group-hover:overflow-visible transition-all">
+                        {claim.description || '-'}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ring-1 ring-inset ${STATUS_COLORS[claim.status] || 'bg-slate-100 text-slate-600 ring-slate-200'}`}>
+                      {claim.status.replace('_', ' ')}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex justify-end gap-2">
+                      {claim.status !== 'approved' && (
+                        <button
+                          onClick={() => updateStatus(claim.id, 'approved')}
+                          disabled={updating === claim.id}
+                          className="px-3 py-1.5 bg-emerald-500 text-white text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-emerald-600 disabled:opacity-50 transition-all shadow-sm shadow-emerald-500/20"
+                        >
+                          Approve
+                        </button>
+                      )}
+                      {claim.status !== 'under_review' && claim.status !== 'approved' && (
+                        <button
+                          onClick={() => updateStatus(claim.id, 'under_review')}
+                          disabled={updating === claim.id}
+                          className="px-3 py-1.5 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-amber-600 disabled:opacity-50 transition-all shadow-sm shadow-amber-500/20"
+                        >
+                          Review
+                        </button>
+                      )}
+                      {claim.status !== 'rejected' && (
+                        <button
+                          onClick={() => updateStatus(claim.id, 'rejected')}
+                          disabled={updating === claim.id}
+                          className="px-3 py-1.5 bg-white border border-rose-200 text-rose-500 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-rose-50 disabled:opacity-50 transition-all"
+                        >
+                          Reject
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
