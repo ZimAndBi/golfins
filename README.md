@@ -40,6 +40,14 @@ docker-compose up -d
 - **Frontend**: http://localhost:3000
 - **API**: http://localhost/api
 
+User: admin@golfins.com
+Password: Admin@123
+
+Test xác nhận thanh toán:
+curl.exe -X POST http://localhost/api/v1/payments/webhook `
+         -H "Content-Type: application/json" `
+         -d '{\"transaction_content\": \"GOLF POL-22971E\"}'
+
 ## 📋 Features
 
 ### ✅ Implemented (MVP)

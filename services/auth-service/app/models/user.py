@@ -3,7 +3,7 @@ User model for Auth Service
 Location: services/auth-service/app/models/user.py
 """
 
-from sqlalchemy import Column, String, DateTime, Boolean, Enum as SQLEnum
+from sqlalchemy import Column, String, DateTime, Boolean, Enum as SQLEnum, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 import uuid
@@ -36,6 +36,15 @@ class User(Base):
     first_name = Column(String(100))
     last_name = Column(String(100))
     date_of_birth = Column(DateTime)
+    
+    # Extra fields for Insurance context
+    nationality = Column(String(100))
+    gender = Column(String(20))
+    id_passport = Column(String(100))
+    address = Column(String(500))
+    company_name = Column(String(255))
+    user_metadata = Column(JSON, default={})  # Generic metadata storage (renamed from metadata)
+
     role = Column(SQLEnum(UserRole), default=UserRole.CUSTOMER, nullable=False)
     status = Column(SQLEnum(UserStatus), default=UserStatus.ACTIVE, nullable=False)
     email_verified = Column(Boolean, default=False)

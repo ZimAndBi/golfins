@@ -38,11 +38,32 @@ apiClient.interceptors.response.use(
 )
 
 export const authAPI = {
-  register: (email: string, password: string, firstName: string, lastName: string) =>
-    apiClient.post('/auth/register', { email, password, first_name: firstName, last_name: lastName }),
+  // OTP endpoints
+  sendOTP: (email: string, purpose: 'register' | 'reset_password', name?: string) =>
+    apiClient.post('/auth/otp/send', { email, purpose, name }),
+  verifyOTP: (email: string, purpose: 'register' | 'reset_password', otp_code: string) =>
+    apiClient.post('/auth/otp/verify', { email, purpose, otp_code }),
+
+  // Auth endpoints
+  register: (email: string, password: string, firstName: string, lastName: string, phone: string, otpCode: string) =>
+    apiClient.post('/auth/register', {
+      email,
+      password,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone || null,
+      otp_code: otpCode,
+    }),
   login: (email: string, password: string) =>
     apiClient.post('/auth/login', { email, password }),
   getMe: () => apiClient.get('/auth/me'),
+  updateMe: (data: any) => apiClient.patch('/auth/me', data),
+
+  // Password reset
+  forgotPassword: (email: string) =>
+    apiClient.post('/auth/forgot-password', { email }),
+  resetPassword: (email: string, otpCode: string, newPassword: string) =>
+    apiClient.post('/auth/reset-password', { email, otp_code: otpCode, new_password: newPassword }),
 }
 
 export const policyAPI = {

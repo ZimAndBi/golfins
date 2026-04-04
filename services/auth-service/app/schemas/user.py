@@ -23,14 +23,66 @@ class UserStatus(str, Enum):
     SUSPENDED = "suspended"
 
 
-# Request schemas
+# ── OTP Request / Response schemas ────────────────────────────────────────────
+
+class OTPSendRequest(BaseModel):
+    """Request to send an OTP code"""
+    email: EmailStr
+    purpose: str = Field(
+        ...,
+        pattern="^(register|reset_password)$",
+        description="Purpose: 'register' or 'reset_password'"
+    )
+    name: Optional[str] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "email": "john@example.com",
+                "purpose": "register",
+                "name": "John"
+            }
+        }
+
+
+class OTPVerifyRequest(BaseModel):
+    """Request to verify an OTP code"""
+    email: EmailStr
+    purpose: str = Field(
+        ...,
+        pattern="^(register|reset_password)$",
+        description="Purpose: 'register' or 'reset_password'"
+    )
+    otp_code: str = Field(..., min_length=6, max_length=6, description="6-digit OTP code")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "email": "john@example.com",
+                "purpose": "register",
+                "otp_code": "123456"
+            }
+        }
+
+
+class OTPResponse(BaseModel):
+    """OTP operation response"""
+    status: str
+    message: str
+    expires_in: Optional[int] = None
+    retry_after: Optional[int] = None
+
+
+# ── Registration schemas ──────────────────────────────────────────────────────
+
 class UserRegisterRequest(BaseModel):
-    """User registration request"""
+    """User registration request — OTP must be verified before calling this"""
     email: EmailStr
     password: str = Field(..., min_length=8, description="Password must be at least 8 characters")
     first_name: str = Field(..., min_length=1, max_length=100)
     last_name: str = Field(..., min_length=1, max_length=100)
-    phone: Optional[str] = None
+    phone: Optional[str] = Field(None, max_length=20, description="Mobile phone number")
+    otp_code: str = Field(..., min_length=6, max_length=6, description="Verified OTP code")
 
     class Config:
         json_schema_extra = {
@@ -39,7 +91,8 @@ class UserRegisterRequest(BaseModel):
                 "password": "SecurePass123!",
                 "first_name": "John",
                 "last_name": "Doe",
-                "phone": "+1234567890"
+                "phone": "+84901234567",
+                "otp_code": "123456"
             }
         }
 
@@ -63,7 +116,52 @@ class TokenRefreshRequest(BaseModel):
     refresh_token: str
 
 
-# Response schemas
+# ── Forgot / Reset password schemas ───────────────────────────────────────────
+
+class ForgotPasswordRequest(BaseModel):
+    """Request to initiate password reset — sends OTP to email"""
+    email: EmailStr
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "email": "john@example.com"
+            }
+        }
+
+
+class ResetPasswordRequest(BaseModel):
+    """Reset password using a verified OTP"""
+    email: EmailStr
+    otp_code: str = Field(..., min_length=6, max_length=6, description="6-digit OTP code")
+    new_password: str = Field(..., min_length=8, description="New password (min 8 chars)")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "email": "john@example.com",
+                "otp_code": "123456",
+                "new_password": "NewSecurePass456!"
+            }
+        }
+
+
+class UserUpdateRequest(BaseModel):
+    """Request to update user profile info"""
+    first_name: Optional[str] = Field(None, min_length=1, max_length=100)
+    last_name: Optional[str] = Field(None, min_length=1, max_length=100)
+    phone: Optional[str] = Field(None, max_length=20)
+    email: Optional[EmailStr] = None
+    nationality: Optional[str] = Field(None, max_length=100)
+    gender: Optional[str] = Field(None, max_length=20)
+    id_passport: Optional[str] = Field(None, max_length=100)
+    address: Optional[str] = Field(None, max_length=500)
+    company_name: Optional[str] = Field(None, max_length=255)
+    otp_code: Optional[str] = None  # Required if email or phone is changed
+
+
+# ── Response schemas ──────────────────────────────────────────────────────────
+
 class UserResponse(BaseModel):
     """User response model"""
     id: str
@@ -71,6 +169,11 @@ class UserResponse(BaseModel):
     first_name: str
     last_name: str
     phone: Optional[str]
+    nationality: Optional[str] = None
+    gender: Optional[str] = None
+    id_passport: Optional[str] = None
+    address: Optional[str] = None
+    company_name: Optional[str] = None
     role: UserRole
     status: UserStatus
     email_verified: bool
@@ -113,6 +216,12 @@ class UserMeResponse(BaseModel):
     email: str
     first_name: str
     last_name: str
+    phone: Optional[str] = None
+    nationality: Optional[str] = None
+    gender: Optional[str] = None
+    id_passport: Optional[str] = None
+    address: Optional[str] = None
+    company_name: Optional[str] = None
     role: UserRole
     status: UserStatus
 

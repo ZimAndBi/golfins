@@ -52,7 +52,7 @@ def _draw_certificate(c: canvas.Canvas, policy: dict, user: dict) -> None:
     # ── Header ──────────────────────────────────────────────────────────────
     c.setFillColor(colors.white)
     c.setFont("Helvetica-Bold", 28)
-    c.drawString(30, height - 55, "GOLFINS")
+    c.drawString(30, height - 55, "UIC")
     c.setFont("Helvetica", 12)
     c.setFillColor(colors.HexColor("#94a3b8"))
     c.drawString(30, height - 75, "Golf Insurance Certificate")
@@ -65,14 +65,14 @@ def _draw_certificate(c: canvas.Canvas, policy: dict, user: dict) -> None:
     c.drawRightString(width - 30, height - 65, f"Issued: {datetime.utcnow().strftime('%d %b %Y')}")
 
     # ── Accent bar ───────────────────────────────────────────────────────────
-    c.setFillColor(colors.HexColor("#10b981"))
+    c.setFillColor(colors.HexColor("#1e40af"))
     c.rect(0, height - 124, width, 4, fill=1, stroke=0)
 
     # ── Policy number band ───────────────────────────────────────────────────
     y = height - 175
-    c.setFillColor(colors.HexColor("#f0fdf4"))
+    c.setFillColor(colors.HexColor("#f8fafc"))
     c.roundRect(25, y - 10, width - 50, 55, 8, fill=1, stroke=0)
-    c.setFillColor(colors.HexColor("#166534"))
+    c.setFillColor(colors.HexColor("#64748b"))
     c.setFont("Helvetica", 10)
     c.drawString(45, y + 30, "POLICY NUMBER")
     c.setFont("Helvetica-Bold", 22)
@@ -92,7 +92,7 @@ def _draw_certificate(c: canvas.Canvas, policy: dict, user: dict) -> None:
     c.setFillColor(colors.HexColor("#0f172a"))
     c.setFont("Helvetica-Bold", 13)
     c.drawString(30, y_section, "Insured Details")
-    c.setFillColor(colors.HexColor("#10b981"))
+    c.setFillColor(colors.HexColor("#1e40af"))
     c.rect(30, y_section - 4, 60, 2, fill=1, stroke=0)
 
     first = user.get("first_name", "")
@@ -109,7 +109,7 @@ def _draw_certificate(c: canvas.Canvas, policy: dict, user: dict) -> None:
     c.setFillColor(colors.HexColor("#0f172a"))
     c.setFont("Helvetica-Bold", 13)
     c.drawString(30, y_section2, "Coverage Details")
-    c.setFillColor(colors.HexColor("#10b981"))
+    c.setFillColor(colors.HexColor("#1e40af"))
     c.rect(30, y_section2 - 4, 70, 2, fill=1, stroke=0)
 
     created_at = policy.get("created_at", "")
@@ -123,9 +123,9 @@ def _draw_certificate(c: canvas.Canvas, policy: dict, user: dict) -> None:
 
     premium = policy.get("premium_amount", 0)
     try:
-        premium_str = f"${float(premium):.2f}"
+        premium_str = f"{int(float(premium)):,} VND".replace(",", ".")
     except Exception:
-        premium_str = f"${premium}"
+        premium_str = f"{premium} VND"
 
     _field_row(c, 30, y_section2 - 30, "Annual Premium", premium_str)
     _field_row(c, 30, y_section2 - 52, "Issue Date", issue_str)
@@ -174,8 +174,8 @@ def _draw_certificate(c: canvas.Canvas, policy: dict, user: dict) -> None:
     c.rect(0, 0, width, 50, fill=1, stroke=0)
     c.setFillColor(colors.HexColor("#64748b"))
     c.setFont("Helvetica", 8)
-    c.drawCentredString(width / 2, 30, "Golfins Insurance Pty Ltd  |  ABN 00 000 000 000  |  AFS Licence 000000")
-    c.drawCentredString(width / 2, 18, "This certificate is issued subject to the terms and conditions of the Golf Insurance Product Disclosure Statement.")
+    c.drawCentredString(width / 2, 30, "United Insurance Company of Vietnam  |   00 000 000 000  |   Licence 000000")
+    c.drawCentredString(width / 2, 18, "This certificate is issued subject to the terms and conditions of the United Insurance Product Disclosure Statement.")
     c.drawCentredString(width / 2, 6, f"Document generated {datetime.utcnow().strftime('%d %b %Y %H:%M')} UTC")
 
 

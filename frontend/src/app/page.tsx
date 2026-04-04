@@ -54,33 +54,55 @@ export default function Landing() {
 
       {/* Pricing */}
       <section className="my-12 bg-gray-100 py-12 px-6 rounded-lg">
-        <h2 className="text-3xl font-bold text-center mb-8">Affordable Coverage</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <h2 className="text-3xl font-bold text-center mb-2">Insurance Programs</h2>
+        <p className="text-center text-gray-500 mb-8">Choose the coverage that fits your game</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-8 rounded-lg shadow">
-            <h3 className="text-2xl font-bold mb-4">Round Play</h3>
-            <p className="text-4xl font-bold text-secondary mb-4">$15-50</p>
-            <p className="text-gray-600 mb-4">Per round, based on your profile</p>
-            <ul className="space-y-2 mb-6">
-              <li>✓ Hole damage coverage</li>
-              <li>✓ Lost ball protection</li>
-              <li>✓ Injury coverage</li>
+            <h3 className="text-xl font-bold mb-1">Spot — 1 Day</h3>
+            <p className="text-gray-400 text-sm mb-4">Single round coverage</p>
+            <p className="text-3xl font-bold text-secondary mb-1">100,000 ₫</p>
+            <p className="text-xs text-gray-500 mb-4">(incl. VAT)</p>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✓ Liability to public: 20M ₫</li>
+              <li>✓ Golfing equipment: 5M ₫</li>
+              <li>✓ Personal accident: 50M ₫</li>
+              <li>✓ Personal effects: 4M ₫</li>
             </ul>
-            <Link href="/register" className="block text-center bg-secondary text-white py-2 rounded hover:bg-emerald-700">
-              Get Started
+            <Link href="/quote" className="block text-center bg-secondary text-white py-2 rounded hover:bg-emerald-700">
+              Get Quote
             </Link>
           </div>
-          <div className="bg-white p-8 rounded-lg shadow border-2 border-secondary">
-            <h3 className="text-2xl font-bold mb-4">Annual Pass</h3>
-            <p className="text-4xl font-bold text-accent mb-4">$299</p>
-            <p className="text-gray-600 mb-4">Unlimited coverage for 1 year</p>
-            <ul className="space-y-2 mb-6">
-              <li>✓ All round play benefits</li>
-              <li>✓ Equipment coverage</li>
-              <li>✓ Hole-in-one bonus</li>
-              <li>✓ Priority claims</li>
+          <div className="bg-white p-8 rounded-lg shadow border-2 border-secondary relative">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
+            <h3 className="text-xl font-bold mb-1">Annual — Plan B</h3>
+            <p className="text-gray-400 text-sm mb-4">Full year, balanced coverage</p>
+            <p className="text-3xl font-bold text-accent mb-1">2,090,000 ₫</p>
+            <p className="text-xs text-gray-500 mb-4">(incl. VAT)</p>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✓ Liability: 2 Billion ₫</li>
+              <li>✓ Equipment: 30M ₫</li>
+              <li>✓ Personal accident: 200M ₫</li>
+              <li>✓ Hole-in-one: 20M ₫</li>
+              <li>✓ Personal effects: 8M ₫</li>
             </ul>
-            <Link href="/register" className="block text-center bg-accent text-black py-2 rounded hover:bg-amber-600 font-bold">
-              Best Value
+            <Link href="/quote" className="block text-center bg-accent text-black py-2 rounded hover:bg-amber-600 font-bold">
+              Best Value →
+            </Link>
+          </div>
+          <div className="bg-white p-8 rounded-lg shadow">
+            <h3 className="text-xl font-bold mb-1">Annual — Plan C</h3>
+            <p className="text-gray-400 text-sm mb-4">Maximum protection</p>
+            <p className="text-3xl font-bold text-secondary mb-1">3,080,000 ₫</p>
+            <p className="text-xs text-gray-500 mb-4">(incl. VAT)</p>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✓ Liability: 3 Billion ₫</li>
+              <li>✓ Equipment: 50M ₫</li>
+              <li>✓ Personal accident: 200M ₫</li>
+              <li>✓ Hole-in-one: 30M ₫</li>
+              <li>✓ Personal effects: 10M ₫</li>
+            </ul>
+            <Link href="/quote" className="block text-center bg-secondary text-white py-2 rounded hover:bg-emerald-700">
+              Get Quote
             </Link>
           </div>
         </div>

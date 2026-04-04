@@ -34,21 +34,60 @@ def send_email(to: str, subject: str, html_body: str) -> bool:
         logger.error(f"Failed to send email to {to}: {e}")
         return False
 
+# NOTE: In Python f-strings, literal {{ and }} must be doubled.
 EMAIL_TEMPLATES = {
-    "policy_purchased": {
-        "subject": "Your Golf Insurance Policy is Active!",
+    "policy_active": {
+        "subject": "🏌️ Your Golf Insurance Policy is now ACTIVE!",
         "body": lambda data: f"""
-<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px">
-  <h1 style="color:#1F2937">Golf Insurance Policy Confirmed</h1>
-  <p>Dear {data.get('name', 'Valued Customer')},</p>
-  <p>Your golf insurance policy has been successfully purchased and is now <strong>active</strong>.</p>
-  <div style="background:#f3f4f6;padding:20px;border-radius:8px;margin:20px 0">
-    <p><strong>Policy Number:</strong> {data.get('policy_number', 'N/A')}</p>
-    <p><strong>Premium:</strong> ${data.get('premium', 'N/A')}</p>
-    <p><strong>Status:</strong> Active</p>
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:0;border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)">
+  <div style="background:linear-gradient(135deg,#0f172a,#2563eb);padding:40px 30px;text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">🛡️</div>
+    <h1 style="color:white;margin:0;font-size:24px;letter-spacing:-0.5px">Certificate of Insurance</h1>
+    <p style="color:#bfdbfe;margin:8px 0 0;font-weight:bold;text-transform:uppercase;font-size:12px;letter-spacing:1px">Status: Fully Activated</p>
   </div>
-  <p>You can view your policy at any time by logging into your account.</p>
-  <p style="color:#059669"><strong>Golfins Team</strong></p>
+  <div style="background:white;padding:30px">
+    <p style="color:#1e293b;font-size:16px">Dear <strong>{data.get('name', 'Valued Customer')}</strong>,</p>
+    <p style="color:#475569;line-height:1.6">Congratulations! Your payment has been verified and your insurance coverage is now officially <strong>Active</strong>.</p>
+    
+    <div style="background:#f8fafc;border-radius:12px;padding:24px;margin:24px 0;border:1px solid #f1f5f9">
+        <table style="width:100%;border-collapse:collapse">
+            <tr>
+                <td style="color:#64748b;font-size:11px;text-transform:uppercase;font-weight:bold;padding-bottom:4px">Policy Number</td>
+                <td style="color:#64748b;font-size:11px;text-transform:uppercase;font-weight:bold;padding-bottom:4px;text-align:right">Expiry Date</td>
+            </tr>
+            <tr>
+                <td style="color:#0f172a;font-size:18px;font-weight:black;font-family:monospace">{data.get('policy_number', 'N/A')}</td>
+                <td style="color:#0f172a;font-size:15px;font-weight:bold;text-align:right">{data.get('expiry_date', 'N/A')}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="text-align:center;margin:32px 0">
+        <a href="{data.get('certificate_link', '#')}" style="background:#2563eb;color:white;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:14px">DOWNLOAD E-CERTIFICATE</a>
+    </div>
+
+    <p style="color:#64748b;font-size:13px;line-height:1.6;font-style:italic">Please keep this digital certificate for your records.</p>
+    
+    <hr style="border:none;border-top:1px solid #f1f5f9;margin:30px 0">
+    <p style="color:#0f172a;font-weight:bold;margin:0">UIC Insurance Team</p>
+    <p style="color:#94a3b8;font-size:11px;margin:4px 0 0">Trusted Protection by UIC</p>
+  </div>
+</div>
+""",
+    },
+    "policy_purchased": {
+        "subject": "Payment Received — Your Golf Insurance Order",
+        "body": lambda data: f"""
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;border:1px solid #f1f5f9;border-radius:12px">
+  <h1 style="color:#1F2937">Purchase Confirmation</h1>
+  <p>Dear {data.get('name', 'Valued Customer')},</p>
+  <p>Thank you for choosing UIC. We have received your order. Once payment is confirmed, your policy will be activated.</p>
+  <div style="background:#f8fafc;padding:20px;border-radius:12px;margin:20px 0;border:1px solid #f1f5f9">
+    <p style="margin:5px 0"><strong>Policy Number:</strong> {data.get('policy_number', 'N/A')}</p>
+    <p style="margin:5px 0"><strong>Total Premium:</strong> {format(int(float(data.get('premium', 0))), ',').replace(',', '.')} ₫</p>
+    <p style="margin:5px 0"><strong>Status:</strong> Processing Verification</p>
+  </div>
+  <p><strong>UIC Team</strong></p>
 </div>
 """,
     },
@@ -58,36 +97,8 @@ EMAIL_TEMPLATES = {
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px">
   <h1 style="color:#1F2937">Claim Received</h1>
   <p>Dear {data.get('name', 'Valued Customer')},</p>
-  <p>We have received your insurance claim and it is now under review.</p>
-  <div style="background:#f3f4f6;padding:20px;border-radius:8px;margin:20px 0">
-    <p><strong>Claim Number:</strong> {data.get('claim_number', 'N/A')}</p>
-    <p><strong>Amount Requested:</strong> ${data.get('amount', 'N/A')}</p>
-    <p><strong>Status:</strong> Submitted</p>
-  </div>
-  <p>Our team will review your claim and get back to you within 3-5 business days.</p>
-  <p style="color:#059669"><strong>Golfins Team</strong></p>
-</div>
-""",
-    },
-    "hoi_approved": {
-        "subject": "🏌️ Hole-in-One Claim Approved — Congratulations!",
-        "body": lambda data: f"""
-<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px">
-  <div style="background:linear-gradient(135deg,#1F2937,#065f46);padding:30px;border-radius:12px;text-align:center;margin-bottom:24px">
-    <div style="font-size:64px">⛳</div>
-    <h1 style="color:white;margin:12px 0">HOLE IN ONE!</h1>
-    <p style="color:#6ee7b7;font-size:18px">Congratulations, {data.get('name', 'Golfer')}!</p>
-  </div>
-  <p>What an incredible achievement! Your Hole-in-One claim has been <strong style="color:#059669">automatically approved</strong>.</p>
-  <div style="background:#f0fdf4;border:2px solid #86efac;padding:20px;border-radius:8px;margin:20px 0">
-    <p><strong>Claim Number:</strong> {data.get('claim_number', 'N/A')}</p>
-    <p><strong>Course:</strong> {data.get('course_name', 'N/A')}</p>
-    <p><strong>Hole:</strong> #{data.get('hole_number', 'N/A')}</p>
-    <p><strong>Celebration Amount:</strong> ${data.get('amount', '0')}</p>
-    <p><strong>Status:</strong> <span style="color:#059669;font-weight:bold">Approved ✓</span></p>
-  </div>
-  <p>Your celebration expenses will be reimbursed within 2-3 business days. Enjoy the round of drinks — you've earned it!</p>
-  <p style="color:#059669"><strong>Golfins Team</strong></p>
+  <p>We've received your claim. Status: Under Review.</p>
+  <p><strong>UIC Team</strong></p>
 </div>
 """,
     },
@@ -108,7 +119,6 @@ async def health():
 
 @app.post("/api/v1/notifications/send")
 async def send_notification(data: dict):
-    """Send email notification"""
     recipient = data.get("recipient_email", "")
     template_name = data.get("template", "")
     template_data = data.get("data", {})
@@ -117,13 +127,12 @@ async def send_notification(data: dict):
     if not recipient:
         return {"notification_id": notification_id, "status": "failed", "error": "No recipient"}
 
-    # Use template if specified, otherwise use raw subject/message
     if template_name and template_name in EMAIL_TEMPLATES:
         tmpl = EMAIL_TEMPLATES[template_name]
         subject = tmpl["subject"]
         body = tmpl["body"](template_data)
     else:
-        subject = data.get("subject", "Notification from Golfins")
+        subject = data.get("subject", "Notification from UIC")
         body = f"<p>{data.get('message', '')}</p>"
 
     success = send_email(recipient, subject, body)
@@ -131,9 +140,7 @@ async def send_notification(data: dict):
     return {
         "notification_id": notification_id,
         "recipient": recipient,
-        "type": "email",
         "status": "sent" if success else "failed",
-        "sent_at": datetime.utcnow().isoformat(),
     }
 
 if __name__ == "__main__":

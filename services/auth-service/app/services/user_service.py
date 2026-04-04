@@ -23,7 +23,8 @@ class UserService:
 
     async def register(self, user_data: UserRegisterRequest) -> dict:
         """
-        Register a new user
+        Register a new user.
+        OTP verification must happen BEFORE calling this method (at API layer).
         Returns: user_id, access_token, refresh_token
         """
         try:
@@ -38,10 +39,10 @@ class UserService:
                 password_hash=hash_password(user_data.password),
                 first_name=user_data.first_name,
                 last_name=user_data.last_name,
-                phone=user_data.phone,
+                phone=user_data.phone or None,
                 role=UserRole.CUSTOMER,
                 status=UserStatus.ACTIVE,
-                email_verified=False
+                email_verified=True  # Verified via OTP before registration
             )
 
             self.db.add(user)
@@ -111,6 +112,27 @@ class UserService:
             "refresh_token": refresh_token,
             "token_type": "bearer",
             "expires_in": 1800
+        }
+
+    async def reset_password(self, email: str, new_password: str) -> dict:
+        """
+        Reset a user's password.
+        OTP verification must happen BEFORE calling this method (at API layer).
+        """
+        user = await self.get_user_by_email(email)
+        if not user:
+            raise ValueError("User not found")
+
+        user.password_hash = hash_password(new_password)
+        self.db.add(user)
+        await self.db.commit()
+        await self.db.refresh(user)
+
+        logger.info(f"Password reset for user: {user.email}")
+
+        return {
+            "status": "success",
+            "message": "Password has been reset successfully",
         }
 
     async def get_user_by_id(self, user_id: str) -> User:
