@@ -53,9 +53,9 @@ export default function RootLayout({
                 {isAuthenticated ? (
                   <>
                     {navLinks.map(link => (
-                      <Link 
-                        key={link.href} 
-                        href={link.href} 
+                      <Link
+                        key={link.href}
+                        href={link.href}
                         className={`text-sm font-bold tracking-tight transition-colors ${pathname === link.href ? 'text-secondary font-black' : 'text-gray-300 hover:text-white'}`}
                       >
                         {link.label}
@@ -66,7 +66,7 @@ export default function RootLayout({
                         Admin Portal
                       </Link>
                     )}
-                    
+
                     <div className="w-px h-6 bg-white/10 mx-2" />
 
                     <div className="relative group">
@@ -116,7 +116,7 @@ export default function RootLayout({
                     {user?.first_name?.[0] || 'U'}
                   </div>
                 )}
-                <button 
+                <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                   className="p-2 bg-white/10 rounded-xl hover:bg-white/20 transition-colors"
                 >
@@ -135,17 +135,17 @@ export default function RootLayout({
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)} />
             <div className="absolute right-0 top-0 bottom-0 w-72 bg-primary shadow-2xl p-6 flex flex-col">
               <div className="mb-10 text-center">
-                 <div className="w-20 h-20 rounded-3xl bg-secondary mx-auto flex items-center justify-center text-3xl mb-4 shadow-xl shadow-secondary/20 font-black">
-                     {user?.first_name?.[0] || 'G'}
-                 </div>
-                 {isAuthenticated ? (
-                    <>
-                      <h3 className="text-xl font-black tracking-tight">{user?.first_name} {user?.last_name}</h3>
-                      <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">{user?.role || 'Guest'}</p>
-                    </>
-                 ) : (
-                    <h3 className="text-xl font-black tracking-tight italic text-gray-400">Not Signed In</h3>
-                 )}
+                <div className="w-20 h-20 rounded-3xl bg-secondary mx-auto flex items-center justify-center text-3xl mb-4 shadow-xl shadow-secondary/20 font-black">
+                  {user?.first_name?.[0] || 'G'}
+                </div>
+                {isAuthenticated ? (
+                  <>
+                    <h3 className="text-xl font-black tracking-tight">{user?.first_name} {user?.last_name}</h3>
+                    <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mt-1">{user?.role || 'Guest'}</p>
+                  </>
+                ) : (
+                  <h3 className="text-xl font-black tracking-tight italic text-gray-400">Not Signed In</h3>
+                )}
               </div>
 
               <div className="flex-1 space-y-2">
@@ -189,8 +189,15 @@ export default function RootLayout({
             <div className="text-xl font-black tracking-tighter text-gray-300">GOLFINS</div>
             <p className="text-[10px] font-black uppercase tracking-[0.3em]">&copy; 2026 UIC Systems. All Rights Reserved.</p>
             <div className="flex gap-4">
-               <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">?</div>
-               <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">🌐</div>
+              <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">?</div>
+              {/* <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">🌐</div> */}
+
+              <a href="https://www.uic.vn" target="_blank" rel="noopener noreferrer">
+                <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                  🌐
+                </div>
+              </a>
+
             </div>
           </div>
         </footer>

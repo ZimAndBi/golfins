@@ -2,24 +2,6 @@ version: '3.8'
 
 services:
   # ======== DATABASES ========
-  postgres:
-    image: postgres:15-alpine
-    container_name: golfins-postgres
-    environment:
-      POSTGRES_DB: golfins
-      POSTGRES_USER: golfins_user
-      POSTGRES_PASSWORD: golfins_pass
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U golfins_user -d golfins"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - golfins-network
 
   redis:
     image: redis:7-alpine
@@ -93,12 +75,10 @@ services:
     volumes:
       - ./services/auth-service:/app
     environment:
-      DATABASE_URL: postgresql+asyncpg://golfins_user:golfins_pass@postgres:5432/golfins
+      DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: redis://redis:6379/0
       SERVICE_NAME: auth-service
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
     networks:
@@ -113,13 +93,11 @@ services:
     volumes:
       - ./services/policy-service:/app
     environment:
-      DATABASE_URL: postgresql+asyncpg://golfins_user:golfins_pass@postgres:5432/golfins
+      DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: redis://redis:6379/0
       AUTH_SERVICE_URL: http://auth-service:8000
       SERVICE_NAME: policy-service
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
       auth-service:
@@ -136,13 +114,11 @@ services:
     volumes:
       - ./services/premium-engine:/app
     environment:
-      DATABASE_URL: postgresql+asyncpg://golfins_user:golfins_pass@postgres:5432/golfins
+      DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: redis://redis:6379/0
       AUTH_SERVICE_URL: http://auth-service:8000
       SERVICE_NAME: premium-engine
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
       auth-service:
@@ -159,13 +135,11 @@ services:
     volumes:
       - ./services/claims-service:/app
     environment:
-      DATABASE_URL: postgresql+asyncpg://golfins_user:golfins_pass@postgres:5432/golfins
+      DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: redis://redis:6379/0
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
       SERVICE_NAME: claims-service
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
       rabbitmq:
@@ -182,13 +156,11 @@ services:
     volumes:
       - ./services/document-service:/app
     environment:
-      DATABASE_URL: postgresql+asyncpg://golfins_user:golfins_pass@postgres:5432/golfins
+      DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: redis://redis:6379/0
       MINIO_URL: http://minio:9000
       SERVICE_NAME: document-service
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
       minio:
@@ -264,8 +236,6 @@ services:
 
 # ======== VOLUMES ========
 volumes:
-  postgres_data:
-    driver: local
   redis_data:
     driver: local
   rabbitmq_data:

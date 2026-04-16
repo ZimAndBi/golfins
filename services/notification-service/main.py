@@ -102,6 +102,36 @@ EMAIL_TEMPLATES = {
 </div>
 """,
     },
+    "otp_register": {
+        "subject": "Your Registration OTP Code - UIC",
+        "body": lambda data: f"""
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;border:1px solid #f1f5f9;border-radius:12px">
+  <h1 style="color:#1F2937">Verification Code</h1>
+  <p>Dear {data.get('name', 'User')},</p>
+  <p>Your OTP to complete registration is:</p>
+  <div style="background:#f8fafc;padding:20px;border-radius:12px;margin:20px 0;border:1px solid #f1f5f9;text-align:center">
+    <p style="margin:0;font-size:32px;letter-spacing:6px;font-weight:bold;color:#2563eb">{data.get('otp_code', 'N/A')}</p>
+  </div>
+  <p>This code will expire in {data.get('ttl_minutes', 5)} minutes. Please do not share it with anyone.</p>
+  <p><strong>UIC Team</strong></p>
+</div>
+""",
+    },
+    "otp_reset_password": {
+        "subject": "Your Password Reset Code - UIC",
+        "body": lambda data: f"""
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;border:1px solid #f1f5f9;border-radius:12px">
+  <h1 style="color:#1F2937">Password Reset</h1>
+  <p>Dear {data.get('name', 'User')},</p>
+  <p>Your OTP to reset your password is:</p>
+  <div style="background:#f8fafc;padding:20px;border-radius:12px;margin:20px 0;border:1px solid #f1f5f9;text-align:center">
+    <p style="margin:0;font-size:32px;letter-spacing:6px;font-weight:bold;color:#ef4444">{data.get('otp_code', 'N/A')}</p>
+  </div>
+  <p>This code will expire in {data.get('ttl_minutes', 5)} minutes. If you didn't request this, please ignore this email.</p>
+  <p><strong>UIC Team</strong></p>
+</div>
+""",
+    },
 }
 
 @asynccontextmanager
